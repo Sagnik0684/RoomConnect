@@ -1,43 +1,44 @@
-import prisma from "../lib/prisma.js";
+import { getDB } from "../lib/db.js";
+import { ObjectId } from "mongodb";
 
 export const addMessage = async (req, res) => {
-  const tokenUserId = req.userId;
-  const chatId = req.params.chatId;
-  const text = req.body.text;
+    const tokenUserId = req.userId;
+    const chatId = req.params.chatId;
+    const text = req.body.text;
+    const db = getDB();
 
-  try {
-    const chat = await prisma.chat.findUnique({
-      where: {
-        id: chatId,
-        userIDs: {
-          hasSome: [tokenUserId],
-        },
-      },
-    });
+    try {
+        const chat = await db.collection("chats").findOne({
+            _id: new ObjectId(chatId),
+            userIDs: new ObjectId(tokenUserId),
+        });
 
-    if (!chat) return res.status(404).json({ message: "Chat not found!" });
+        if (!chat) {
+            return res.status(404).json({ message: "Chat not found or user not authorized!" });
+        }
 
-    const message = await prisma.message.create({
-      data: {
-        text,
-        chatId,
-        userId: tokenUserId,
-      },
-    });
+        const newMessage = {
+            text,
+            userId: new ObjectId(tokenUserId),
+            chatId: new ObjectId(chatId),
+            createdAt: new Date(),
+        };
 
-    await prisma.chat.update({
-      where: {
-        id: chatId,
-      },
-      data: {
-        seenBy: [tokenUserId],
-        lastMessage: text,
-      },
-    });
+        const result = await db.collection("messages").insertOne(newMessage);
 
-    res.status(200).json(message);
-  } catch (err) {
-    console.log(err);
-    res.status(500).json({ message: "Failed to add message!" });
-  }
+        await db.collection("chats").updateOne(
+            { _id: new ObjectId(chatId) },
+            {
+                $set: {
+                    lastMessage: text,
+                    seenBy: [new ObjectId(tokenUserId)],
+                },
+            }
+        );
+
+        res.status(200).json({ ...newMessage, _id: result.insertedId });
+    } catch (err) {
+        console.log(err);
+        res.status(500).json({ message: "Failed to add message!" });
+    }
 };
