@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const apiRequest = axios.create({
-    baseURL: "http://localhost:5173/api",
+    baseURL: "/api",   // relative, goes through Vite proxy to backend
     withCredentials: true,
 })
 

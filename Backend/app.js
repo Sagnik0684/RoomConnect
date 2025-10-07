@@ -34,7 +34,7 @@ app.use("/api/test", (req, res) => {
 });
 
 // Start the server and connect to the database
-app.listen(5173, () => {
+app.listen(5001, () => {
     connectDB(); // Connect to MongoDB when the server starts
-    console.log("Server is running on port 5173");
+    console.log("Server is running on port 5001");
 });

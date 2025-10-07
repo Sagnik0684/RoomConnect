@@ -3,8 +3,8 @@ import { Server, Socket } from "socket.io";
 
 const io = new Server({
     cors: {
-        origin: "http://localhost:5173"
-        // origin: "http://192.168.29.129:5173"
+        origin: "http://localhost:4000"
+        // origin: "http://192.168.29.129:4000"
     },
 });
 
