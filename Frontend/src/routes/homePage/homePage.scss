@@ -75,16 +75,18 @@ body, html {
 .aboutContainer {
   width: 100%;
   display: flex;
-  justify-content: center;
-  align-items: center;
+  justify-content: flex-start;
+  align-items: flex-start;
   min-height: 100vh;
-  padding: 60px 20px;
-  background-color: #fcf5f3;  // extends the homepage background color smoothly downward
+  height : auto;
+  padding: 200px 20px 20px 60px; 
+  position: relative;
+
 
   .aboutSection {
-    max-width: 900px;
+    max-width: 59%;
     background: white;
-    padding: 40px 50px;
+    padding: 60px 20px 60px;
     border-radius: 12px;
     box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
     display: flex;
@@ -117,7 +119,8 @@ body, html {
         flex: 1;
         background: #f8f1ec;
         border-radius: 12px;
-        padding: 30px;
+        padding: 20px;
+        max-width: 220px;
         text-align: center;
         box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
         transition: transform 0.3s ease;
@@ -128,17 +131,31 @@ body, html {
         }
 
         h1 {
-          font-size: 42px;
+          font-size: 32px;
           color: #e76f51;
           margin-bottom: 8px;
         }
 
         h2 {
-          font-size: 20px;
+          font-size: 16px;
           font-weight: 400;
           color: #777;
         }
       }
     }
   }
+}
+.aboutContainer::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 40%;          // same as imgContainer
+  height: 100%;        // full height of aboutContainer
+  background-color: #fcf5f3;
+  background-image: url('/Rent.jpg');
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  z-index: -1;
 }
