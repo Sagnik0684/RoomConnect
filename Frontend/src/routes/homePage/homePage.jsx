@@ -1,4 +1,5 @@
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import SearchBar from "../../components/searchBar/searchBar";
 import "./homePage.scss";
 import { AuthContext } from "../../context/AuthContext";
@@ -6,6 +7,17 @@ import { AuthContext } from "../../context/AuthContext";
 function HomePage() {
   // const {currentUser} = useContext(AuthContext);
   // console.log(currentUser);
+
+  const location = useLocation();
+
+  useEffect(() => {
+    if (location.state && location.state.from === "about") {
+      const aboutSection = document.getElementById("about");
+      if (aboutSection) {
+        aboutSection.scrollIntoView({ behavior: "smooth" });
+      }
+    }
+  }, [location]);
 
   return (
     <>

@@ -1,6 +1,6 @@
 import { useContext, useState } from "react";
 import "./navbar.scss";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
 
 function Navbar() {
@@ -8,6 +8,21 @@ function Navbar() {
 
   const { currentUser } = useContext(AuthContext);
   const number = 4;
+
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  const handleAboutClick = () => {
+    if (location.pathname === "/") {
+      const aboutSection = document.getElementById("about");
+      if (aboutSection) {
+        aboutSection.scrollIntoView({ behavior: "smooth" });
+      }
+    } else {
+      // Prepare for future redirect or scroll functionality
+      navigate("/", { state: { from: "about" } });
+    }
+  };
 
   return (
     <nav>
@@ -17,7 +32,7 @@ function Navbar() {
           <span>RoomConnect</span>
         </a>
         <a href="/">Home</a>
-        <a href="/">About</a>
+        <a href="#" onClick={handleAboutClick}>About</a>
         <a href="/">Contact</a>
         <a href="/">Agents</a>
       </div>
